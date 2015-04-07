@@ -119,6 +119,7 @@ class Unified_Post_Types {
 		$primary_post_type = $this->get_primary_post_type();
 		foreach( $menu as $key => $menu_item ) {
 			foreach( $unified_post_types as $post_type ) {
+				// Remove links to unified posts that aren't the primary
 				if ( ! empty( $menu_item[2] ) && 'edit.php?post_type=' . $post_type === $menu_item[2] && $post_type !== $primary_post_type ) {
 					unset( $menu[ $key ] );
 					continue;
