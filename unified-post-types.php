@@ -135,7 +135,7 @@ class Unified_Post_Types {
 	 * @param string $title
 	 * @param int $id
 	 */
-	public function filter_the_title( $title, $id ) {
+	public function filter_the_title( $title, $id = null ) {
 		if ( ! $this->is_unified_post_type_screen() ) {
 			return $title;
 		}
