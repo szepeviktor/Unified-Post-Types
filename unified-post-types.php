@@ -39,6 +39,7 @@ class Unified_Post_Types {
 	 */
 	private function setup_filters() {
 		add_filter( 'the_title', array( $this, 'filter_the_title' ), 11, 2 ); // after esc_html()
+		add_filter( 'parent_file', array( $this, 'filter_parent_file' ) );
 	}
 
 	/**
@@ -156,6 +157,27 @@ class Unified_Post_Types {
 		}
 
 		return $menu_icon . ' ' . $title;
+	}
+
+	/**
+	 * Reset "Parent File" to the primary post type for all post types
+	 *
+	 * @param string $parent_file
+	 * @return string
+	 */
+	public function filter_parent_file( $parent_file ) {
+
+		$screen = get_current_screen();
+		if ( ! $screen || 'post' !== $screen->base || ! in_array( $screen->post_type, $this->get_unified_post_types() ) ) {
+			return $parent_file;
+		}
+
+		$primary_post_type = $this->get_primary_post_type();
+		if ( 'post' === $primary_post_type ) {
+			return 'edit.php';
+		} else {
+			return 'edit.php?post_type=' . $primary_post_type;
+		}
 	}
 
 }
