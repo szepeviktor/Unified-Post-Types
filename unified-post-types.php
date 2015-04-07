@@ -31,6 +31,7 @@ class Unified_Post_Types {
 	private function setup_actions() {
 		add_action( 'pre_get_posts', array( $this, 'action_pre_get_posts' ) );
 		add_action( 'wp', array( $this, 'action_wp_reset_primary_post_type' ) );
+		add_action( 'admin_menu', array( $this, 'action_admin_menu_late' ), 100 );
 	}
 
 	/**
@@ -103,6 +104,25 @@ class Unified_Post_Types {
 		if ( ! empty( $this->global_post_type_needs_reset ) && $this->is_unified_post_type_screen() ) {
 			$this->global_post_type_needs_reset = false;
 			$post_type = $this->get_primary_post_type();
+		}
+
+	}
+
+	/**
+	 * Change the label for the primary post type; remove links to others
+	 */
+	public function action_admin_menu_late() {
+		global $menu;
+
+		$unified_post_types = $this->get_unified_post_types();
+		$primary_post_type = $this->get_primary_post_type();
+		foreach( $menu as $key => $menu_item ) {
+			foreach( $unified_post_types as $post_type ) {
+				if ( ! empty( $menu_item[2] ) && 'edit.php?post_type=' . $post_type === $menu_item[2] && $post_type !== $primary_post_type ) {
+					unset( $menu[ $key ] );
+					continue;
+				}
+			}
 		}
 
 	}
