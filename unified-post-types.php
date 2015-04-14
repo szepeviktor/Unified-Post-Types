@@ -86,7 +86,6 @@ class Unified_Post_Types {
 	 */
 	public function action_pre_get_posts( $query ) {
 
-		$screen = get_current_screen();
 		if ( ! $query->is_main_query() || ! $this->is_unified_post_type_screen() ) {
 			return;
 		}
